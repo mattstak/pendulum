@@ -1,14 +1,14 @@
 const canvas = document.getElementById('circleCanvas');
 const ctx = canvas.getContext('2d');
-let width = window.innerWidth;
-let height = window.innerHeight;
-canvas.width = width;
-canvas.height = height;
 
-let mouseX = width / 2;
-let mouseY = height / 2;
-const rectHeight = 20;
-const rectWidth = 300;
+const pencilImg = new Image();
+pencilImg.src = 'pencil.jpg';
+
+let mouseX = 0;
+let mouseY = 0;
+let scale;
+let rectHeight;
+let rectWidth;
 let x = mouseX;
 let y = mouseY; 
 let xVelocity = 0;
@@ -17,25 +17,35 @@ let xAcceleration = 0;
 let yAcceleration = 0;
 let angle = -1;
 let angularVelocity = 0;
-let angularAcceleration = 0;
-
-const gravity = 1;
+let angularAcceleration = 0;    
+let gravity;
 
 
 window.addEventListener('resize', () => {
-    width = window.innerWidth;
-    height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
+    rescale();
 });
+
+function rescale() {    
+    windowWidth = window.innerWidth;
+    windowHeight = window.innerHeight;
+    canvas.width = windowWidth;
+    canvas.height = windowHeight;
+    scale = Math.min(windowWidth, windowHeight);
+    rectWidth = scale * 0.5;
+    rectHeight = scale * 0.02;
+    gravity = scale/800;
+
+}
 
 canvas.addEventListener('mousemove', (e) => {
     mouseX = e.clientX;
     mouseY = e.clientY;
 });
 
+
 function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    requestAnimationFrame(draw);
+    ctx.clearRect(0, 0, windowWidth, windowHeight);
 
     let prevXVelocity = xVelocity;
     xVelocity = mouseX - x;
@@ -46,8 +56,8 @@ function draw() {
     yAcceleration = yVelocity - prevYVelocity;
     y = mouseY;
     angularAcceleration = (gravity/rectWidth) * Math.cos(angle);  // Gravity
-    angularAcceleration += xAcceleration/(rectWidth*1.5) * Math.sin(angle);
-    angularAcceleration -= yAcceleration/(rectWidth*1.5) * Math.cos(angle);
+    angularAcceleration += xAcceleration/(rectWidth*2.2) * Math.sin(angle);
+    angularAcceleration -= yAcceleration/(rectWidth*2.2) * Math.cos(angle);
     angularAcceleration -= angularVelocity * 0.01
     angularVelocity += angularAcceleration;
     //angularVelocity *= 0.99;
@@ -66,10 +76,10 @@ function draw() {
     ctx.save();                   // Save the current state
     ctx.translate(x, y);          // Move origin to mouse pos
     ctx.rotate(angle);            // Rotate canvas
-    ctx.fillStyle = 'orange';
-    ctx.fillRect(0, -rectHeight/2, rectWidth, rectHeight);  // Draw rectangle from new origin
+
+    ctx.drawImage(pencilImg, 0, -rectHeight/2, rectWidth, rectHeight)
     ctx.restore();  
-    requestAnimationFrame(draw);
 }
 
+rescale();
 draw();
