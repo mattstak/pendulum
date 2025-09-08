@@ -64,7 +64,7 @@ function draw(timestamp) {
     angularAcceleration = (gravity/rectWidth) * Math.cos(angle) * deltaTime;  // Gravity
     angularAcceleration += xAcceleration/(rectWidth*2.2) * Math.sin(angle);
     angularAcceleration -= yAcceleration/(rectWidth*2.2) * Math.cos(angle);
-    angularAcceleration -= angularVelocity * 0.01;
+    angularAcceleration -= angularVelocity * 0.6 * deltaTime;
     angularVelocity += angularAcceleration;
     //angularVelocity *= 0.99;
 
