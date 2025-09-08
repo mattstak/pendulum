@@ -34,7 +34,7 @@ function rescale() {
     scale = Math.min(windowWidth, windowHeight);
     rectWidth = scale * 0.5;
     rectHeight = scale * 0.02;
-    gravity = scale/800;
+    gravity = scale/13.33;
 
 }
 
@@ -61,11 +61,10 @@ function draw(timestamp) {
     yAcceleration = yVelocity - prevYVelocity;
     y = mouseY;
 
-    angularAcceleration = (gravity/rectWidth) * Math.cos(angle);  // Gravity
+    angularAcceleration = (gravity/rectWidth) * Math.cos(angle) * deltaTime;  // Gravity
     angularAcceleration += xAcceleration/(rectWidth*2.2) * Math.sin(angle);
     angularAcceleration -= yAcceleration/(rectWidth*2.2) * Math.cos(angle);
     angularAcceleration -= angularVelocity * 0.01;
-    angularAcceleration *= deltaTime * 60;
     angularVelocity += angularAcceleration;
     //angularVelocity *= 0.99;
 
