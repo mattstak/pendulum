@@ -15,10 +15,11 @@ let xVelocity = 0;
 let yVelocity = 0;
 let xAcceleration = 0;
 let yAcceleration = 0;
-let angle = -1;
+let angle = 1;
 let angularVelocity = 0;
 let angularAcceleration = 0;    
 let gravity;
+let lastTimestamp = performance.now();
 
 
 window.addEventListener('resize', () => {
@@ -43,8 +44,12 @@ canvas.addEventListener('mousemove', (e) => {
 });
 
 
-function draw() {
+function draw(timestamp) {
     requestAnimationFrame(draw);
+
+    const deltaTime = (timestamp - lastTimestamp) / 1000;
+    lastTimestamp = timestamp;
+
     ctx.clearRect(0, 0, windowWidth, windowHeight);
 
     let prevXVelocity = xVelocity;
@@ -55,10 +60,12 @@ function draw() {
     yVelocity = mouseY - y;
     yAcceleration = yVelocity - prevYVelocity;
     y = mouseY;
+
     angularAcceleration = (gravity/rectWidth) * Math.cos(angle);  // Gravity
     angularAcceleration += xAcceleration/(rectWidth*2.2) * Math.sin(angle);
     angularAcceleration -= yAcceleration/(rectWidth*2.2) * Math.cos(angle);
-    angularAcceleration -= angularVelocity * 0.01
+    angularAcceleration -= angularVelocity * 0.01;
+    angularAcceleration *= deltaTime * 60;
     angularVelocity += angularAcceleration;
     //angularVelocity *= 0.99;
 
@@ -82,4 +89,4 @@ function draw() {
 }
 
 rescale();
-draw();
+requestAnimationFrame(draw);
