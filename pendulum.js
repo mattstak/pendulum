@@ -53,12 +53,12 @@ function draw(timestamp) {
     ctx.clearRect(0, 0, windowWidth, windowHeight);
 
     let prevXVelocity = xVelocity;
-    xVelocity = mouseX - x;
-    xAcceleration = xVelocity - prevXVelocity;
+    xVelocity = (mouseX - x) * deltaTime * 60;
+    xAcceleration = (xVelocity - prevXVelocity) * deltaTime * 60;
     x = mouseX;
     let prevYVelocity = yVelocity;
-    yVelocity = mouseY - y;
-    yAcceleration = yVelocity - prevYVelocity;
+    yVelocity = (mouseY - y) * deltaTime * 60;
+    yAcceleration = (yVelocity - prevYVelocity) * deltaTime * 60;
     y = mouseY;
 
     angularAcceleration = (gravity/rectWidth) * Math.cos(angle) * deltaTime;  // Gravity
@@ -70,14 +70,14 @@ function draw(timestamp) {
 
     angle += angularVelocity * deltaTime * 60;
 
-    // if (angularVelocity > 5){
-    //     angularVelocity = 5;
-    //     angularAcceleration = 0;
-    // }
-    // if (angularVelocity < -5){
-    //     angularVelocity = -5;
-    //     angularAcceleration = 0;
-    // }
+    if (angularVelocity > 5){
+        angularVelocity = 5;
+        angularAcceleration = 0;
+    }
+    if (angularVelocity < -5){
+        angularVelocity = -5;
+        angularAcceleration = 0;
+    }
 
     ctx.save();                   // Save the current state
     ctx.translate(x, y);          // Move origin to mouse pos
