@@ -70,12 +70,14 @@ function draw(timestamp) {
 
     angle += angularVelocity * deltaTime * 60;
 
-    if (angularVelocity > 5){
-        angularVelocity = 5;
+    angle = angle % (Math.PI * 2);
+
+    if (angularVelocity > 2){
+        angularVelocity = 2;
         angularAcceleration = 0;
     }
-    if (angularVelocity < -5){
-        angularVelocity = -5;
+    if (angularVelocity < -2){
+        angularVelocity = -2;
         angularAcceleration = 0;
     }
 
